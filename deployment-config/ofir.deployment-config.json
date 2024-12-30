@@ -1,0 +1,4 @@
+{
+  "secrets": ["MY_NAME", "FAMILY_NAME"],
+  "deployablePackages": {}
+}
