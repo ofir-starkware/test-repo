@@ -18,12 +18,17 @@ jobs:
           service=$(echo "$label" | sed 's/^pr-preview-//')
           echo "Extracted service: $service"
           echo "service=$service" >> $GITHUB_ENV
-          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       - name: Log Information
         run: |
           echo "Service: ${{ env.service }}"
           echo "PR Number: ${{ env.pr_number }}"
+
+      - name: Trigger initialize-preview action
+        uses: ./actions/initialize-preview
+        with:
+          service_name: ${{ env.service }}"
+          pr_number: ${{ github.event.pull_request.number }}
 
       - name: Add Preview Ready Label
         uses: actions-ecosystem/action-add-labels@v1

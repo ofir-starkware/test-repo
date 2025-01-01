@@ -1,0 +1,13 @@
+name: "Initialize Preview"
+description: "Triggers node preview initialization"
+inputs:
+  service_name:
+    description: "Name of the service to initialize"
+    required: true
+  pr_number:
+    description: "Number of the pull request"
+    required: true
+
+runs:
+  using: "node20"
+  main: "index.js"
