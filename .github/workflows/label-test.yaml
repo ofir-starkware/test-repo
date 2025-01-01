@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Extract Service and PR Number
         id: extract
         run: |
@@ -35,3 +38,6 @@ jobs:
         with:
           labels: preview-ready-${{ env.service }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+/home/ofir/workspace/test-repo/actions/initialize-preview
