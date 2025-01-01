@@ -7,23 +7,26 @@ on:
 
 jobs:
   handle-pr-preview:
-    if: contains(github.event.label.name, 'pr-preview-')
+    if: startsWith(github.event.label.name, 'pr-preview-')
     runs-on: ubuntu-latest
 
     steps:
       - name: Extract Service and PR Number
         id: extract
         run: |
-          echo "::set-output name=service::${{ github.event.label.name#pr-preview- }}"
-          echo "::set-output name=pr_number::${{ github.event.pull_request.number }}"
+          label="${{ github.event.label.name }}"
+          service=$(echo "$label" | sed 's/^pr-preview-//')
+          echo "Extracted service: $service"
+          echo "service=$service" >> $GITHUB_ENV
+          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       - name: Log Information
         run: |
-          echo "Service: ${{ steps.extract.outputs.service }}"
-          echo "PR Number: ${{ steps.extract.outputs.pr_number }}"
+          echo "Service: ${{ env.service }}"
+          echo "PR Number: ${{ env.pr_number }}"
 
       - name: Add Preview Ready Label
         uses: actions-ecosystem/action-add-labels@v1
         with:
-          labels: preview-ready-${{ steps.extract.outputs.service }}
+          labels: preview-ready-${{ env.service }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
