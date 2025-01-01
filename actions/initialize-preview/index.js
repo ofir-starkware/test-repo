@@ -3,18 +3,16 @@ const asyncAction = async () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log("async timeout action");
-      resolve();
+      resolve(5);
     }, 30000);
   });
 };
 
 const main = async () => {
-  console.log("syncronoius action", process.env.INPUT_PR_NUMBER, process.env.INPUT_SERVICE);
-  setTimeout(() => {
-    console.log("timeout action");
-  }, 30000);
+  console.log("syncronoius action", process.env.INPUT_PR_NUMBER, process.env.INPUT_SERVICE_NAME);
 
-  await asyncAction();
+  const a = await asyncAction();
+  console.log("after async action", a);
 };
 
 main();
