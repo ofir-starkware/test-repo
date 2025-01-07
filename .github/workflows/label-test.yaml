@@ -42,9 +42,9 @@ jobs:
       - name: Determine deployment link based on service
         run: |
           if [ "$service" = "starkgate-v2" ]; then
-            link="mostar2.${{ github.event.pull_request.number }}.sw-dev.io"
+            link="https://mostar2.pr-${{ github.event.pull_request.number }}.sw-dev.io"
           elif [ "$service" = "ofir" ]; then
-            link="mostar2.${{ github.event.pull_request.number }}.sw-dev.io"
+            link="https://mostar2.pr-${{ github.event.pull_request.number }}.sw-dev.io"
           else
             echo "Service not supported"
             exit 1
@@ -57,4 +57,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            PR preview has deployed successfully! Link: ${{ env.link }}
+            🚀 PR preview has deployed successfully! 🎉 Link: [${{ env.link }}](${{ env.link }})
