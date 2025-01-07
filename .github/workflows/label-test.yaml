@@ -38,3 +38,22 @@ jobs:
         with:
           labels: preview-ready-${{ env.service }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine deployment link based on service
+        run: |
+          if [ "$service" = "starkgate-v2" ]; then
+            link="mostar2.${{ github.event.pull_request.number }}.sw-dev.io"
+          elif [ "$service" = "ofir" ]; then
+            link="mostar2.${{ github.event.pull_request.number }}.sw-dev.io"
+          else
+            echo "Service not supported"
+            exit 1
+
+          fi
+          echo "link=${link}" >> $GITHUB_ENV
+
+      - name: Add Preview Initialized Comment
+        uses: actions-ecosystem/action-create-comment@v1
+        with:
+          body: |
+            PR preview has deployed successfully! Link: ${{ env.link }}
