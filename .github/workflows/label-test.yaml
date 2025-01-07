@@ -55,5 +55,6 @@ jobs:
       - name: Add Preview Initialized Comment
         uses: actions-ecosystem/action-create-comment@v1
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             PR preview has deployed successfully! Link: ${{ env.link }}
