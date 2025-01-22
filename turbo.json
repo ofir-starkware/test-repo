@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "ts-declarations": {
+      "dependsOn": ["^ts-declarations", "^build"]
+    },
+    "build": {
+      "dependsOn": ["ts-declarations", "^build"],
+      "outputs": ["dist/**"]
+    },
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "pack": {
+      "dependsOn": ["lint", "build", "test"]
+    },
+    "format": {},
+    "clean": {},
+    "publish-package": {
+      "dependsOn": ["build"]
+    },
+    "publish": {
+      "dependsOn": ["publish-package"]
+    },
+    "@starkgate-v2/ui#build-storybook": {
+      "dependsOn": ["^build"]
+    },
+    "@starkgate/ui#build-storybook": {
+      "dependsOn": ["^build"]
+    },
+    "@starkware-webapps/node-env#lint": {
+      "env": ["NODE_ENV", "APP_ENV"]
+    },
+    "@starkware-webapps/node-logger#lint": {
+      "env": ["NODE_ENV"]
+    }
+  },
+  "globalEnv": ["npm_package_version", "npm_package_name", "NPM_TOKEN", "PRERELEASE"]
+}

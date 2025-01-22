@@ -1,0 +1,37 @@
+{
+  "name": "@pipeline/tag-extractor",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist",
+    "clean": "rm -rf ./dist",
+    "format": "sort-package-json && prettier --write \"**/*.+(ts|js|json|md|yml)\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": ""
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
+    "@changesets/get-dependents-graph": "^1.3.5",
+    "@changesets/git": "^2.0.0",
+    "@manypkg/get-packages": "^2.1.0",
+    "conventional-commits-parser": "^3.2.4",
+    "conventional-recommended-bump": "^6.1.0",
+    "semver": "^7.3.8",
+    "simple-git": "^3.16.1"
+  },
+  "devDependencies": {
+    "@types/conventional-commits-parser": "^3.0.3",
+    "@types/conventional-recommended-bump": "^6.1.0",
+    "@types/node": "^20.14.0",
+    "@types/semver": "^7.3.13",
+    "@vercel/ncc": "0.36.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
