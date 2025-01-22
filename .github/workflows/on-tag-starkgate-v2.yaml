@@ -54,9 +54,9 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ steps.properties.outputs.service_version_suffix }}" != "" ]]; then
-            echo "::set-output name=version_sub_path::"/${{ steps.properties.outputs.service_version_suffix }}""
+            echo "version_subpath=/${{ steps.properties.outputs.service_version_suffix }}" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=version_subpath::"
+            echo "version_subpath=" >> $GITHUB_OUTPUT
           fi
       - name: log properties
         run: |
