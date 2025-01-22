@@ -1,0 +1,68 @@
+name: On StarkGate tag push
+
+on:
+  push:
+    tags:
+      - "@starkgate*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to push"
+        required: true
+
+jobs:
+  starkgate-release-argo:
+    name: Build image and release to Dev
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+        with:
+          version: 9.7.0
+          run_install: false
+
+      - name: Install versioning tool dependencies
+        shell: bash
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          pnpm --filter @pipeline/tag-extractor install
+          pnpm --filter @pipeline/tag-extractor build
+          cp ./workspace/pipeline/tag-extractor/dist/index.js ./actions/common/tag-extractor
+
+      - name: Extract tag properties
+        id: properties
+        uses: ./actions/common/tag-extractor
+        with:
+          tag: ${{ github.event.inputs.tag || github.ref_name }}
+
+      - name: Determine Version Subpath
+        id: determine-version-subpath
+        shell: bash
+        run: |
+          if [[ "${{ steps.properties.outputs.service_version_suffix }}" != "" ]]; then
+            echo "::set-output name=version_sub_path::"/${{ steps.properties.outputs.service_version_suffix }}""
+          else
+            echo "::set-output name=version_subpath::"
+          fi
+      - name: log properties
+        run: |
+          echo "Service: ${{ steps.properties.outputs.service }}"
+          echo "App: ${{ steps.properties.outputs.app }}"
+          echo "Version: ${{ steps.properties.outputs.version }}"
+          echo "Type: ${{ steps.properties.outputs.type }}"
+          echo "Service Version Suffix: ${{ steps.properties.outputs.service_version_suffix }}"
+          echo "Version Subpath: ${{ steps.determine-version-subpath.outputs.version_subpath }}"
