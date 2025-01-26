@@ -3,7 +3,7 @@ name: On StarkGate tag push
 on:
   push:
     tags:
-      - "@starkgate*"
+      - "@starkgate*/*"
   workflow_dispatch:
     inputs:
       tag:
