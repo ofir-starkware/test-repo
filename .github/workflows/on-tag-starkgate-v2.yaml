@@ -50,6 +50,7 @@ jobs:
           tag: ${{ github.event.inputs.tag || github.ref_name }}
 
       - name: Determine Version Subpath
+        id: path_properties
         shell: bash
         run: |
           if [[ "${{ steps.properties.outputs.service_version_suffix }}" != "" ]]; then
@@ -70,4 +71,4 @@ jobs:
           gcp_token: ${{ secrets.gcp_token_starkgate_dev }}
           sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
           prerelease: ${{ steps.properties.outputs.prerelease }}
-          version_sub_path: ${{ steps.properties.outputs.version_sub_path }}
+          version_sub_path: ${{ steps.path_properties.outputs.version_sub_path }}
