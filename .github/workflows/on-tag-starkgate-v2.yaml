@@ -50,19 +50,24 @@ jobs:
           tag: ${{ github.event.inputs.tag || github.ref_name }}
 
       - name: Determine Version Subpath
-        id: determine-version-subpath
         shell: bash
         run: |
           if [[ "${{ steps.properties.outputs.service_version_suffix }}" != "" ]]; then
-            echo "version_subpath=/${{ steps.properties.outputs.service_version_suffix }}" >> $GITHUB_OUTPUT
+            echo "version_sub_path=/${{ steps.properties.outputs.service_version_suffix }}" >> $GITHUB_OUTPUT
           else
-            echo "version_subpath=" >> $GITHUB_OUTPUT
+            echo "version_sub_path=" >> $GITHUB_OUTPUT
           fi
-      - name: log properties
-        run: |
-          echo "Service: ${{ steps.properties.outputs.service }}"
-          echo "App: ${{ steps.properties.outputs.app }}"
-          echo "Version: ${{ steps.properties.outputs.version }}"
-          echo "Type: ${{ steps.properties.outputs.type }}"
-          echo "Service Version Suffix: ${{ steps.properties.outputs.service_version_suffix }}"
-          echo "Version Subpath: ${{ steps.determine-version-subpath.outputs.version_subpath }}"
+
+      - name: Build and Push Image Dev
+        uses: ./actions/starkgate/build-image
+        with:
+          service: ${{ steps.properties.outputs.service }}
+          app: ${{ steps.properties.outputs.app }}
+          version: ${{ steps.properties.outputs.version }}
+          label: latest
+          type: ${{ steps.properties.outputs.type }}
+          gcp_project: starkgate-dev
+          gcp_token: ${{ secrets.gcp_token_starkgate_dev }}
+          sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          prerelease: ${{ steps.properties.outputs.prerelease }}
+          version_sub_path: ${{ steps.properties.outputs.version_sub_path }}

@@ -1,0 +1,51 @@
+name: Build and Push Docker Image
+description: Build a Docker image and push it to the GCR registry
+
+inputs:
+  service:
+    required: true
+    description: starkgate OR starkgate-v2
+  app:
+    required: true
+    description: web OR transfer-log OR screening
+  label:
+    required: true
+    description: latest or stable
+  version:
+    required: true
+    description: X.Y.Z
+  type:
+    required: true
+    description: frontend OR backend
+  gcp_project:
+    required: true
+    description: starkgate-dev or starkgate-prod
+  gcp_token:
+    required: true
+    description: GCP token
+  sentry_auth_token:
+    required: false
+    description: Sentry auth token
+  prerelease:
+    required: false
+    description: dev OR ''
+  version_sub_path:
+    required: false
+    description: /v2 OR ''
+
+runs:
+  using: "composite"
+  steps:
+    - name: log all inputs
+      shell: bash
+      run: |
+        echo "service: ${{ inputs.service }}"
+        echo "app: ${{ inputs.app }}"
+        echo "label: ${{ inputs.label }}"
+        echo "version: ${{ inputs.version }}"
+        echo "type: ${{ inputs.type }}"
+        echo "gcp_project: ${{ inputs.gcp_project }}"
+        echo "gcp_token: ${{ inputs.gcp_token }}"
+        echo "sentry_auth_token: ${{ inputs.sentry_auth_token }}"
+        echo "prerelease: ${{ inputs.prerelease }}"
+        echo "version_sub_path: ${{ inputs.version_sub_path }}"
